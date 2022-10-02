@@ -1,23 +1,34 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { useState } from "react";
 
 export default function App() {
 	const [enteredGoalText, setEnteredGoalText] = useState("")
+	const [courseGoals, setCourseGoals] = useState([]);
 
 	function goalInputHandler(value) {
 		setEnteredGoalText(value)
 	}
 
-	function addGoalhandler() {}
+	function addGoalHandler() {
+		setCourseGoals(currentCourseGoals => [...currentCourseGoals, enteredGoalText])
+		setEnteredGoalText("")
+	}
 
 	return (
 		<View style={styles.appContainer}>
 			<View style={styles.inputContainer}>
-				<TextInput style={styles.textInput} placeholder={"Your course goal!"} onChangeText={goalInputHandler}/>
-				<Button title={"Add Goal"} onPress={addGoalhandler}/>
+				<TextInput style={styles.textInput} placeholder={"Your course goal!"} value={enteredGoalText}
+						   onChangeText={goalInputHandler}/>
+				<Button title={"Add Goal"} onPress={addGoalHandler}/>
 			</View>
 			<View style={styles.goalsContainer}>
-				<Text>List of goals...</Text>
+				<ScrollView>
+					{courseGoals.map((goal, index) => (
+						<View style={styles.goalItem} key={index}>
+							<Text style={styles.goalText}>{goal}</Text>
+						</View>
+					))}
+				</ScrollView>
 			</View>
 		</View>
 	);
@@ -47,5 +58,14 @@ const styles = StyleSheet.create({
 	},
 	goalsContainer: {
 		flex: 5,
+	},
+	goalItem: {
+		margin: 8,
+		padding: 8,
+		borderRadius: 6,
+		backgroundColor: "#5e0acc",
+	},
+	goalText: {
+		color: "white",
 	},
 });
